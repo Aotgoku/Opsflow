@@ -1,10 +1,13 @@
 const mongoose = require('mongoose');
 
-// Use environment variable for MongoDB URI, fallback to hardcoded connection for dev.
-const MONGO_URI = process.env.MONGO_URI || "mongodb+srv://dhruvrakeshjain_db_user:4LuL9O2S0Rz37l92@clusterhackdev0.zb45b98.mongodb.net/taskboard_db?retryWrites=true&w=majority";
+// Use environment variable for MongoDB URI safely.
+const MONGO_URI = process.env.MONGO_URI;
 
 const connectDB = async () => {
   try {
+    if (!MONGO_URI) {
+      throw new Error("MONGO_URI is missing from environment variables.");
+    }
     await mongoose.connect(MONGO_URI);
     console.log('MongoDB Connected Successfully');
   } catch (error) {
